@@ -14,7 +14,7 @@ import {
   isPrismaCliLocallyInstalled,
   translateDatasourceUrl,
   getSchemaPath,
-} from '@prisma-multi-tenant/shared'
+} from 'prisma-multi-tenant-fork-shared'
 
 import { Command, CommandArguments } from '../types'
 import { useYarn } from '../helpers/misc'

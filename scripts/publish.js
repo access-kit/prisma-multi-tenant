@@ -8,6 +8,7 @@ const dryRun = options.includes('--dry-run')
 
 const publish = async () => {
   // 1. Confirm version number and dry-run
+  console.log(versionNumber)
 
   if (!versionNumber) {
     throw new Error('No version number provided')

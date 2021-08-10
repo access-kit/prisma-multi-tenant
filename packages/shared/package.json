@@ -1,11 +1,11 @@
 {
-  "name": "@prisma-multi-tenant/shared",
-  "version": "2.5.0",
+  "name": "prisma-multi-tenant-fork-shared",
+  "version": "2.5.1",
   "description": "Shared methods and constants for prisma-multi-tenant",
   "author": {
-    "name": "Thibaud Courtoison",
-    "email": "do.not.press.enter@gmail.com",
-    "url": "https://errorna.me"
+    "name": "Patrick Steadman",
+    "email": "patrick@computerlab.io",
+    "url": "https://computerlab.io"
   },
   "license": "MIT",
   "main": "build/index.js",
@@ -38,16 +38,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Errorname/prisma-multi-tenant.git"
+    "url": "git+https://github.com/access-kit/prisma-multi-tenant.git"
   },
   "keywords": [
     "prisma",
     "multi-tenant"
   ],
   "bugs": {
-    "url": "https://github.com/Errorname/prisma-multi-tenant/issues"
+    "url": "https://github.com/access-kit/prisma-multi-tenant/issues"
   },
-  "homepage": "https://github.com/Errorname/prisma-multi-tenant#readme",
+  "homepage": "https://github.com/access-kit/prisma-multi-tenant#readme",
   "prettier": {
     "printWidth": 100,
     "semi": false,

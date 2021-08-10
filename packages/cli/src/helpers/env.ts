@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { envPaths } from '@prisma-multi-tenant/shared'
+import { envPaths } from 'prisma-multi-tenant-fork-shared'
 
 export const loadEnv = (): void => {
   try {
