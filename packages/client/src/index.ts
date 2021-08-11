@@ -154,8 +154,7 @@ class MultiTenant<PrismaClient extends { $disconnect: () => Promise<void> }> {
 
     const tenant = await this.management.delete(name)
 
-    console.log("Can't migrate down database with new Prisma Migrate?")
-    // await runDistantPrisma('migrate down --experimental', tenant, false)
+    await runDistantPrisma('migrate down --experimental', tenant, false)
 
     return tenant
   }
