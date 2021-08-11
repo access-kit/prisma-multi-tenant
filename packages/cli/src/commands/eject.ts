@@ -15,10 +15,10 @@ class Eject implements Command {
 
     const yarnOrNpm = (await useYarn()) ? 'yarn remove' : 'npm uninstall'
 
-    await runShell(`${yarnOrNpm} @prisma-multi-tenant/client`)
+    await runShell(`${yarnOrNpm} prisma-multi-tenant-fork-client`)
 
     console.log(
-      chalk`\n✅  {green Successfully removed \`@prisma-multi-tenant/client\` from your app. Bye! 👋}\n`
+      chalk`\n✅  {green Successfully removed \`prisma-multi-tenant-fork-client\` from your app. Bye! 👋}\n`
     )
   }
 }

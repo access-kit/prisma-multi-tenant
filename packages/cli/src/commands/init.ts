@@ -76,13 +76,13 @@ class Init implements Command {
   }
 
   async installPMT() {
-    console.log('\n  Installing `@prisma-multi-tenant/client` as a dependency in your app...')
+    console.log('\n  Installing `prisma-multi-tenant-fork-client` as a dependency in your app...')
 
     const isUsingYarn = await useYarn()
     const command = isUsingYarn ? 'yarn add --ignore-workspace-root-check' : 'npm install'
     const devOption = isUsingYarn ? '--dev' : '-D'
 
-    await runShell(`${command} @prisma-multi-tenant/client@${packageJson.version}`)
+    await runShell(`${command} prisma-multi-tenant-fork-client@${packageJson.version}`)
 
     if (!(await isPrismaCliLocallyInstalled())) {
       console.log('\n  Also installing `prisma` as a dev dependency in your app...')
@@ -224,7 +224,7 @@ class Init implements Command {
 
     const script = `
       const { PrismaClient } = require('@prisma/client') 
-      const { MultiTenant } = require('@prisma-multi-tenant/client')
+      const { MultiTenant } = require('prisma-multi-tenant-fork-client')
 
       // This is the name of your first tenant, try with another one
       const name = "${firstTenant?.name || 'dev'}"
