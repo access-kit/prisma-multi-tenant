@@ -20,11 +20,16 @@ export const getManagementEnv = async (): Promise<{ [name: string]: string }> =>
   if (!process.env.MANAGEMENT_URL) {
     throw new PmtError('missing-env', { name: 'MANAGEMENT_URL' })
   }
+  if (!process.env.MANAGEMENT_PROVIDER) {
+    throw new PmtError('missing-env', { name: 'MANAGEMENT_PROVIDER' })
+  }
 
   const managementUrl = translateDatasourceUrl(process.env.MANAGEMENT_URL)
+  const managementProvider = process.env.MANAGEMENT_PROVIDER || 'sqlite'
 
   return {
     PMT_MANAGEMENT_URL: managementUrl,
+    PMT_MANAGEMENT_PROVIDER: managementProvider,
     PMT_OUTPUT: 'PMT_TMP',
   }
 }

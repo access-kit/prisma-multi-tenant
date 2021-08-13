@@ -12,7 +12,7 @@ import {
 
 import { Command, CommandArguments } from '../types'
 
-const migrateActions = ['up', 'down', 'save']
+const migrateActions = ['dev', 'deploy', 'reset']
 
 class Migrate implements Command {
   name = 'migrate'
@@ -25,7 +25,7 @@ class Migrate implements Command {
     {
       name: 'action',
       optional: false,
-      description: 'Migrate "up", "down" or "save" the tenant',
+      description: 'Migrate "dev", "deploy" or "reset" the tenant',
     },
   ]
   options = [
@@ -34,11 +34,12 @@ class Migrate implements Command {
       description: 'Specify path of schema',
     },
   ]
-  description = 'Migrate tenants (up, down, save)'
+  description = 'Migrate tenants (dev, deploy, reset)'
 
   async execute(args: CommandArguments, management: Management) {
     const { name, action, migrateArgs, prismaArgs } = this.parseArgs(args)
 
+    // TODO: what should this do?
     if (action == 'save') {
       // A. Save on default tenant
       if (!name) {
@@ -169,7 +170,7 @@ class Migrate implements Command {
   }
 
   migrateManagement(action: string, migrateArgs = '', prismaArgs = '') {
-    return runLocalPrisma(`migrate ${action} ${migrateArgs} ${prismaArgs} --experimental`)
+    return runLocalPrisma(`migrate ${action} ${migrateArgs} ${prismaArgs}`)
   }
 
   async migrateSave(

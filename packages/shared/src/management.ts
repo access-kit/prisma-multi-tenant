@@ -122,6 +122,7 @@ export default class Management {
     return {
       name: tenant.name,
       url: tenant.url,
+      provider: 'sqlite', // TODO: fix this
     }
   }
 }

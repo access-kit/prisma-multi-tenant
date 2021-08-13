@@ -1,4 +1,4 @@
-export { clientManagementPath } from './constants'
+export { clientManagementPath, validProviders } from './constants'
 export { PmtError } from './errors'
 export {
   envPaths,

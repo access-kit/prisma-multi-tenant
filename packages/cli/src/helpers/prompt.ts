@@ -51,13 +51,21 @@ const askQuestions = async (
   return (answers as unknown) as Datasource
 }
 
-const managementConf = async (args: CommandArguments): Promise<{ url: string }> => {
+const managementConf = async (
+  args: CommandArguments
+): Promise<{ url: string; provider: string }> => {
   return askQuestions([
     {
       name: 'url',
       message: 'Management database url:',
       type: 'input',
       value: args.options.url,
+    },
+    {
+      name: 'provider',
+      message: 'Management database provider (sqlite, postgres, mysql):',
+      type: 'input',
+      value: args.options.provider,
     },
   ])
 }
@@ -75,6 +83,12 @@ const tenantConf = async (args: CommandArguments): Promise<Datasource> => {
       message: 'Database url:',
       type: 'input',
       value: args.options.url,
+    },
+    {
+      name: 'provider',
+      message: 'Management database provider (sqlite, postgres, mysql):',
+      type: 'input',
+      value: args.options.provider,
     },
   ])
 }

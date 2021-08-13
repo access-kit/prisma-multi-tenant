@@ -14,6 +14,7 @@ import {
   isPrismaCliLocallyInstalled,
   translateDatasourceUrl,
   getSchemaPath,
+  validProviders,
 } from 'prisma-multi-tenant-fork-shared'
 
 import { Command, CommandArguments } from '../types'
@@ -34,6 +35,10 @@ class Init implements Command {
       description: 'URL of the management database',
     },
     {
+      name: 'provider',
+      description: `Database provider, must be one of: ${validProviders.join(', ')}`,
+    },
+    {
       name: 'schema',
       description: 'Specify path of schema',
     },
@@ -49,11 +54,15 @@ class Init implements Command {
     // 1. Install prisma-multi-tenant to the application
     await this.installPMT()
 
-    // 2. Prompt management url
-    const managementUrl = await this.getManagementDatasource(args)
+    // 2. Prompt management url and provider
+    const { managementUrl, managementProvider } = await this.getManagementDatasource(args)
 
     // 3. Update .env file
-    const firstTenant = await this.updateEnvAndSchemaFiles(managementUrl, args.options.schema)
+    const firstTenant = await this.updateEnvAndSchemaFiles(
+      managementUrl,
+      managementProvider,
+      args.options.schema
+    )
 
     // 4. Generate clients
     await this.generateClients(args.options.schema)
@@ -93,20 +102,30 @@ class Init implements Command {
 
   async getManagementDatasource(args: CommandArguments) {
     console.log(chalk`\n  {yellow We will now configure the management database:}\n`)
+    const mgmtConf = await prompt.managementConf(args)
+    const { provider: managementProvider } = mgmtConf
+    let { url: managementUrl } = mgmtConf
 
-    let { url: managementUrl } = await prompt.managementConf(args)
+    if (!validProviders.includes(managementProvider)) {
+      const allValid = validProviders.join(', ')
+      throw new Error(
+        `'${managementProvider}' is not a valid provider, must be one of: ${allValid}`
+      )
+    }
 
     const schemaPath = args.options.schema || (await getSchemaPath())
 
     managementUrl = translateDatasourceUrl(managementUrl, path.dirname(schemaPath))
 
     process.env.MANAGEMENT_URL = managementUrl
+    process.env.MANAGEMENT_PROVIDER = managementProvider
 
-    return managementUrl
+    return { managementUrl, managementProvider }
   }
 
   async updateEnvAndSchemaFiles(
     managementUrl: string,
+    managementProvider: string,
     schemaPath?: string
   ): Promise<Datasource | null> {
     console.log('\n  Updating .env and schema.prisma files...')
@@ -172,9 +191,10 @@ class Init implements Command {
 
     envFile += `
 
-      # The following env variable is used by prisma-multi-tenant
+      # The following env variables are used by prisma-multi-tenant
       
       MANAGEMENT_URL=${managementUrl}
+      MANAGEMENT_PROVIDER=${managementProvider}
     `
       .split('\n')
       .map((x) => x.substr(6))
@@ -190,6 +210,7 @@ class Init implements Command {
     return {
       name: 'dev',
       url: firstTenantUrl,
+      provider: managementProvider,
     }
   }
 
@@ -203,7 +224,7 @@ class Init implements Command {
   setUpManagement() {
     console.log('\n  Setting up management database...')
 
-    return migrate.migrateManagement('up', '--create-db')
+    return migrate.migrateManagement('deploy')
   }
 
   async createFirstTenant(firstTenant: Datasource, management: Management) {
